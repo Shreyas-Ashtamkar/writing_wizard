@@ -1,11 +1,16 @@
 import openai
-from utils import get_configs, cache
+from utils import get_configs, get_env, write_to_file, cache
 from types import SimpleNamespace
 
-DEFAULT_SYSTEM_PROMPT = """Question Answering Mode:
-Provide factual and concise answers to each question.
-Strive for accuracy and stay relevant to the specific question asked.
-Avoid conversational elements or elaboration."""
+DEFAULT_SYSTEM_PROMPT = """Question Answering Mode. Instructions:
+- Provide factual and concise answers to each question.
+- Strive for accuracy and stay relevant to the specific question asked.
+- Absoultely no conversational elements or elaboration.
+- All answers should be straight to point.
+- Article needs to be elaborate with Examples. It should be well formatted in Markdown and should be atleast 350 words. Maximum 1000 words.
+- File name needs to be short and expressive. It should be one to three words long.
+- When asked for file name, provide only one file name.
+"""
 
 class WritingWizard:
     def __init__(self, messages=[], system_prompt=DEFAULT_SYSTEM_PROMPT):
@@ -19,6 +24,7 @@ class WritingWizard:
     @cache
     def configs(self):
         all_configs = get_configs()
+        all_configs.openai.api.key = get_env(all_configs.openai.api.key_var)
         all_configs.llm.selected = SimpleNamespace(**all_configs.llm.available[all_configs.llm.selected])
         return all_configs
     
@@ -72,23 +78,34 @@ class WritingWizard:
             'content' : response.message.content
         }
     
-    def save_to_file(self, filename):
+    def save_to_file(self, filename = None):
         if len(self.messages) < 3 and filename == None:
             print("Cannot write to file, atleast three messages are needed, currently are",len(self.messages))
         
-        article = self.messages[0]
-        article = self.messages[0]
+        if not filename:
+            filename = self.messages[-1]["content"] + '.md'
+        
+        return write_to_file(
+            output_folder   = self.configs.output_folder, 
+            filename        = filename,
+            data            = self.messages[0]["content"]
+        )
 
 WritingWizard = WritingWizard()
 
 if __name__ == '__main__':
     from sys import argv
     def test():
-        WritingWizard.chat("Write an article on the topic Article-Writing Generative AI ChatBots, in about 200 words.")
-        print(WritingWizard.messages)
-        print("---")
-        WritingWizard.chat("Write the title of the above article in 3 words.")
-        print(WritingWizard.messages)
+        WritingWizard.chat("Write an article on the topic Article-Writing Generative AI ChatBots.")
+        # print(WritingWizard.messages)
+        print("--- Article Fetched ---")
+        
+        WritingWizard.chat("Suggest one file name which can contain this article.")
+        # print(WritingWizard.messages)
+        print("--- Title Fetched --- ")
+        
+        print(WritingWizard.save_to_file())
+        print("--- File saved --- ")
     
     if len(argv) > 1:
         if argv[1] == "--test":

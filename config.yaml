@@ -6,18 +6,16 @@ openai:
 llm:
   available:
     - name: Mixtral-8x22B-Instruct-v0.1
-      model_string: mistralai/Mixtral-8x22B-Instruct-v0.1
+      model: mistralai/Mixtral-8x22B-Instruct-v0.1
       cost: 0.0
-
     - name: gemma-1.1-7b-it
-      model_string: google/gemma-1.1-7b-it
+      model: google/gemma-1.1-7b-it
       cost: 0.0
-    
     - name: dolphin-2.6-mixtral-8x7b
-      model_string: cognitivecomputations/dolphin-2.6-mixtral-8x7b
+      model: cognitivecomputations/dolphin-2.6-mixtral-8x7b
       cost: 0.0
-    
     - name: Mistral-7B-Instruct-v0.2
       model: mistralai/Mistral-7B-Instruct-v0.2
       cost: 0.0
-  selected: 3
+  selected: 1
+output_folder: OUTPUT
