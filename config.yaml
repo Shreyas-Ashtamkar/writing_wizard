@@ -1,9 +1,8 @@
 ---
 openai:
   api:
-    key: CSkQPUjHWOykiIvLHMfmfwUFv9tYE2aN
+    key_var: OPENAI_API_KEY
     url: https://api.deepinfra.com/v1/openai
-
 llm:
   available:
     - name: Mixtral-8x22B-Instruct-v0.1
