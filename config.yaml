@@ -10,7 +10,7 @@ llm:
       cost: 0.0
     - name: gemma-1.1-7b-it
       model: google/gemma-1.1-7b-it
-      cost: 0.0
+      cost: 0.007
     - name: dolphin-2.6-mixtral-8x7b
       model: cognitivecomputations/dolphin-2.6-mixtral-8x7b
       cost: 0.0
