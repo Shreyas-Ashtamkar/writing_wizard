@@ -1,8 +1,8 @@
-## Writing Wizard: Generative AI for Content Creation
+# Writing Wizard: Generative AI for Content Creation
 
 Writing Wizard is a powerful AI-powered platform that utilizes Generative AI technology to create high-quality written content in diverse formats. This intuitive tool simplifies the content creation process, allowing users to easily generate impactful prose across various applications.
 
-### Core Features:
+## Core Features:
 
 **1. Content Generation:**
 
@@ -63,7 +63,7 @@ Writing Wizard is a powerful AI-powered platform that utilizes Generative AI tec
 - A content creator utilizes it to write a children's book with vibrant illustrations.
 
 
-### Benefits:
+## Benefits:
 
 * **Accessibility:** Easy-to-use interface and intuitive tools for everyone.
 * **Efficiency:** Rapid content creation and optimization save valuable time.
@@ -71,11 +71,28 @@ Writing Wizard is a powerful AI-powered platform that utilizes Generative AI tec
 * **Customization:** Tailored content formats to specific needs and preferences.
 
 
-**Conclusion:**
+## Conclusion:
 
 Writing Wizard provides a comprehensive and accessible solution for all your content creation needs. Its robust capabilities and ease of use make it an ideal tool for writers, creators, and businesses of all sizes.
 
-#### P.S. 
+---
+
+## Installation 
+
+1. Clone the repository in local environment.
+2. Create a .env file, with API key, set to `OPENAI_API_KEY`
+3. Run the main file in the following way :
+   ```powershell
+   python main.py -t "Topic"
+   ```
+4. For more information, run the command:
+   ```powershell
+   python main.py --help
+   ```
+
+_Please note that currently only DeepInfra kepys are supported_
+
+### Note :
 
 This README.md page has been has been created using the command line 
 ```powershell
