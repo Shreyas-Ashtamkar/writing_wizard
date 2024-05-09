@@ -17,5 +17,5 @@ llm:
     - name: Mistral-7B-Instruct-v0.2
       model: mistralai/Mistral-7B-Instruct-v0.2
       cost: 0.0
-  selected: 1
+  selected: 2
 output_folder: OUTPUT

@@ -2,14 +2,14 @@ import openai
 from utils import get_configs, get_env, write_to_file, cache
 from types import SimpleNamespace
 
-DEFAULT_SYSTEM_PROMPT = """Question Answering Mode. Instructions:
+DEFAULT_SYSTEM_PROMPT = """Question Answering Mode. Follow each of the below instructions carefully and strictly.:
 - Provide factual and concise answers to each question.
 - Strive for accuracy and stay relevant to the specific question asked.
 - Absoultely no conversational elements or elaboration.
 - All answers should be straight to point.
-- Article needs to be elaborate with Examples. It should be well formatted in Markdown and should be atleast 350 words. Maximum 1000 words.
+- Article needs to be elaborate with Examples. It should be well formatted in Markdown and should be atleast 350 words.
 - File name needs to be short and expressive. It should be one to three words long.
-- When asked for file name, provide only one file name.
+- When asked for file name, provide only one file name. Do not provide explaination.
 """
 
 class _WritingWizard:
@@ -111,7 +111,8 @@ class _WritingWizard:
         else:
             response = self.server.chat.completions.create(
                 model    = self.model.model,
-                messages = [self.system_prompt] + self.messages
+                messages = [self.system_prompt] + self.messages,
+                max_tokens = 4096
             ).choices[0]
             response = {
                 'role' : response.message.role,
