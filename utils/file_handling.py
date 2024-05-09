@@ -3,12 +3,14 @@ import os, hashlib, random, re
 def sanitize_filename(filename:str):
     if '\n' in filename:
         filename = filename.replace('\n', ' ')
-    if '\nExplanation:' in filename:
-        filename = filename.split('\nExplanation:')[0]
-        
+    if '`' in filename:
+        filename = filename.replace('`', ' ')
+    if ' Explanation:' in filename:
+        filename = filename.split(' Explanation:')[0]
     if ' or ' in filename:
         filename = filename.split(' or ')[0]
-        
+    filename = filename.strip()
+    
     filename = re.sub(r'[\\/*?:"<>|]', "", filename)
     filename = filename.replace(" ", "_")
     return filename
