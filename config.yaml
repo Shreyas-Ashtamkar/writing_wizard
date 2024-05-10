@@ -1,7 +1,7 @@
 ---
 openai:
   api:
-    key_var: OPENAI_API_KEY
+    key_var: API_KEY
     url: https://api.deepinfra.com/v1/openai
 llm:
   available:
