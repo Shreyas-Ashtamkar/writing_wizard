@@ -3,7 +3,7 @@ import fire, json, datetime
 from writing_wizard import WritingWizard
 from utils import write_to_file, set_env
 
-def main(topic:str=None, create_file:bool=True, output_filename:str=None, output_folder:str=None, interactive:bool=False):
+def write_article(topic:str=None, create_file:bool=True, output_filename:str=None, output_folder:str=None, interactive:bool=False):
     """Generate an article based on the given topic.
     
     Args:
@@ -17,7 +17,7 @@ def main(topic:str=None, create_file:bool=True, output_filename:str=None, output
         None
     
     Example:
-        main(topic="Python Programming", create_file=True, output_folder="articles", interactive=False)
+        write_article(topic="Python Programming", create_file=True, output_folder="articles", interactive=False)
     """
     
     if interactive:
@@ -42,9 +42,6 @@ def main(topic:str=None, create_file:bool=True, output_filename:str=None, output
             else:
                 print("No key provided... Exiting...")
                 exit(1)
-        else:
-            print("CRITICAL ERROR : Exiting...")
-            exit(1)
     
     if not topic:
         topic = input("Please enter a topic : ")
@@ -89,4 +86,4 @@ def main(topic:str=None, create_file:bool=True, output_filename:str=None, output
     print("\nDone.")
 
 if __name__ == '__main__':
-    fire.Fire(main)
+    fire.Fire(write_article)
