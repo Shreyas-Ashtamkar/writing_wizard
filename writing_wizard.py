@@ -25,7 +25,7 @@ class _WritingWizard:
             'role' : 'system',
             'content' : system_prompt
         }
-            
+        
     @property
     @cache
     def configs(self):
@@ -34,10 +34,16 @@ class _WritingWizard:
         Returns:
             dict: A dictionary containing all configurations after updating API key and selected LLM.
         """
+        all_configs = []
         all_configs = get_configs()
         all_configs.openai.api.key = get_env(all_configs.openai.api.key_var)
         all_configs.llm.selected = SimpleNamespace(**all_configs.llm.available[all_configs.llm.selected])
         return all_configs
+    
+    def reload(self):
+        get_configs.cache_clear()
+        self.__class__.configs.fget.cache_clear()
+        self.__class__.server.fget.cache_clear()
     
     @property
     @cache
@@ -50,10 +56,16 @@ class _WritingWizard:
     def server(self) -> openai.OpenAI:
         """Return an instance of OpenAI using the configurations provided."""
         configs = self.configs
-        return openai.OpenAI(
-            api_key  = configs.openai.api.key,
-            base_url = configs.openai.api.url,
-        )
+        server = None
+        try:
+            server  = openai.OpenAI(
+                api_key  = configs.openai.api.key,
+                base_url = configs.openai.api.url,
+            )
+        except openai.OpenAIError as e:
+            print("Error : Cannot initialize server (60) : " + e.__str__())
+            
+        return server
     
     @property    
     def system_prompt(self):
@@ -109,16 +121,20 @@ class _WritingWizard:
                 'content' : "test-content"
             }
         else:
-            response = self.server.chat.completions.create(
-                model    = self.model.model,
-                messages = [self.system_prompt] + self.messages,
-                max_tokens = 4096
-            ).choices[0]
-            response = {
-                'role' : response.message.role,
-                'content' : response.message.content
-            }
-            
+            try:
+                response = self.server.chat.completions.create(
+                    model    = self.model.model,
+                    messages = [self.system_prompt] + self.messages,
+                    max_tokens = 4096
+                ).choices[0]
+                response = {
+                    'role' : response.message.role,
+                    'content' : response.message.content
+                }
+            except AttributeError as e:
+                print("Error : Cannot generate completions (125) : " + e.__str__())
+                exit(1)
+
         self.messages = response
         return response
     
