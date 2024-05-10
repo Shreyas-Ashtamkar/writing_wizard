@@ -1,7 +1,7 @@
 import fire, json, datetime
 
 from writing_wizard import WritingWizard
-from utils import write_to_file
+from utils import write_to_file, set_env
 
 def main(topic:str=None, create_file:bool=True, output_filename:str=None, output_folder:str=None, interactive:bool=False):
     """Generate an article based on the given topic.
@@ -23,6 +23,28 @@ def main(topic:str=None, create_file:bool=True, output_filename:str=None, output
     if interactive:
         print("     Welcome to Writing-Wizard")
         print("-----------------------------------")
+        
+        if WritingWizard.server == None:
+            if (API_KEY := input("Please enter the API key (or leave blank to exit) : ")) != "":
+                if create_file := (input("Do you wish to save this key? ").lower() in ('y', 'yes', 'ye', 'ya', 'yaa', 'sure')):
+                    write_to_file(
+                        data = f"API_KEY={API_KEY}",
+                        output_folder=".",
+                        filename=".env"
+                    )
+                else:
+                    set_env('API_KEY', API_KEY)
+                
+                WritingWizard.reload()
+                if WritingWizard.server == None:
+                    print("ERROR : Key invalid or .env not found")
+                    exit(1)
+            else:
+                print("No key provided... Exiting...")
+                exit(1)
+        else:
+            print("CRITICAL ERROR : Exiting...")
+            exit(1)
     
     if not topic:
         topic = input("Please enter a topic : ")
