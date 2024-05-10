@@ -1,5 +1,7 @@
 # Writing Wizard: Generative AI for Content Creation
 
+![Writing-Wizard-Logo](writing-wizard.jpeg)
+
 Writing Wizard is a powerful AI-powered platform that utilizes Generative AI technology to create high-quality written content in diverse formats. This intuitive tool simplifies the content creation process, allowing users to easily generate impactful prose across various applications.
 
 ## Core Features:
