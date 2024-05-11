@@ -1,7 +1,6 @@
-from writing_wizard import WritingWizard
-
 import streamlit as st
-from streamlit_js_eval import streamlit_js_eval
+
+from writing_wizard import WritingWizard
 
 st.set_page_config(layout='wide')
 
