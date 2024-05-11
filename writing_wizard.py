@@ -99,6 +99,9 @@ class _WritingWizard:
         Args:
             msg (dict): The message to be appended to the list of messages.
         """
+        if not isinstance(msg, dict):
+            raise ValueError("Please use WritingWizard.add_messages to add custom messages with roles else assign dictionary {role:str, content:str}")
+        
         self._messages.append(msg)
         
         # if len(self.messages) > 4:
@@ -108,7 +111,19 @@ class _WritingWizard:
         """Clears the messages stored in the object."""
         self._messages = []
     
-    def __generate_response(self, test=False) -> dict[str,str]:
+    def create_message(self, content:str, role:str="user"):
+        """Add a message to the object.
+        
+        Args:
+            content (str): The content of the message.
+            role (str, optional): The role of the user sending the message. Defaults to "user".
+        """
+        return {
+            "role": role,
+            "content" : content
+        }
+    
+    def generate_response(self, test=False) -> dict[str,str]:
         """Generates a response using the server's chat completions.
         
         Returns:
@@ -125,7 +140,8 @@ class _WritingWizard:
                 response = self.server.chat.completions.create(
                     model    = self.model.model,
                     messages = [self.system_prompt] + self.messages,
-                    max_tokens = 4096
+                    max_tokens = 4096,
+                    # stream   = True
                 ).choices[0]
                 response = {
                     'role' : response.message.role,
@@ -134,8 +150,9 @@ class _WritingWizard:
             except AttributeError as e:
                 print("Error : Cannot generate completions (125) : " + e.__str__())
                 exit(1)
+        
+        print(type(response))
 
-        self.messages = response
         return response
     
     def chat(self, prompt:str):
@@ -144,7 +161,7 @@ class _WritingWizard:
             'role' : 'user',
             'content' : prompt
         }
-        self.__generate_response()
+        self.messages = self.generate_response()
         return self.messages
     
     def save_to_file(self, filename = None, output_folder:str=None):
