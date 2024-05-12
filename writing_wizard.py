@@ -7,9 +7,8 @@ DEFAULT_SYSTEM_PROMPT = """Question Answering Mode. Follow each of the below ins
 - Strive for accuracy and stay relevant to the specific question asked.
 - Absoultely no conversational elements or elaboration.
 - All answers should be straight to point.
-- Article needs to be elaborate with Examples. It should be well formatted in Markdown and should be atleast 350 words.
-- File name needs to be short and expressive. It should be one to three words long.
-- When asked for file name, provide only one file name. Do not provide explaination.
+- The Article needs to be expressive with Examples. IT should be very long. It should be well formatted in Markdown and should be atleast 500 words.
+- When you are asked for file name needs to be short and expressive. It should be one to three words long. Provide only one file name. Do not provide explaination.
 """
 
 class _WritingWizard:
@@ -91,6 +90,14 @@ class _WritingWizard:
     def messages(self):
         """Return the messages stored in the instance."""
         return self._messages
+    
+    @property
+    def last_message(self):
+        """Return the last message stored in the instance."""
+        if len(self._messages) > 0:
+            return self._messages[-1]
+        else:
+            return None
     
     @messages.setter
     def messages(self, msg:dict):

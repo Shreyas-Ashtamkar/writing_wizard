@@ -1,9 +1,9 @@
 from writing_wizard import WritingWizard
 
 import streamlit as st
-from streamlit_js_eval import streamlit_js_eval
-
 from utils.gui_tools import *
+
+import pyperclip
 
 st.set_page_config(layout='wide')
 
@@ -18,8 +18,19 @@ with st.container(border=True):
             st.markdown(message['content'])
 
     if input_ := st.chat_input("Provide a topic :"):
+        WritingWizard.clear_messages()
+        
         WritingWizard.messages = WritingWizard.create_message( role='user', content=input_ )
+        show_message(WritingWizard.last_message)
+        
         WritingWizard.messages = WritingWizard.generate_response()
+        show_message(WritingWizard.last_message)
+    
+    if WritingWizard.last_message:
+        st.button(
+            label    = "Copy to Clipboard",
+            on_click = pyperclip.copy( WritingWizard.last_message['content'] )
+        )
 
-with st.sidebar:
-    st.title("Cool")
+# with st.sidebar:
+#     st.title("Cool")

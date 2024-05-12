@@ -83,7 +83,10 @@ Writing Wizard provides a comprehensive and accessible solution for all your con
 ## Installation 
 
 1. Clone the repository in local environment.
-2. Create a .env file, with API key, set to `OPENAI_API_KEY`
+   ```powershell
+   python -m venv .venv
+   ```
+2. Create a .env file, with API key, set to `API_KEY`
 3. Run the main file in the following way :
    ```powershell
    python main.py -t "Topic"
@@ -93,11 +96,16 @@ Writing Wizard provides a comprehensive and accessible solution for all your con
    python main.py --help
    ```
 
-_Please note that currently only DeepInfra kepys are supported_
+_Please note that currently only DeepInfra keys are supported._
 
-### Note :
+## Note :
+
+**_For other OPenAI compatible APIs, please change the URL and create a key named 'key' in config.py, under openai.api._**
 
 This README.md page has been has been created using the command line 
 ```powershell
 python main.py --topic "Writing Wizard Generative AI"
 ```
+
+## Disclaimer :
+### This is a work in progress, use at your own risk !
