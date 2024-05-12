@@ -5,14 +5,15 @@ from types import SimpleNamespace
 DEFAULT_SYSTEM_PROMPT = """Question Answering Mode. Follow each of the below instructions carefully and strictly.:
 - Provide factual and concise answers to each question.
 - Strive for accuracy and stay relevant to the specific question asked.
-- Absoultely no conversational elements or elaboration.
+- Absoultely no conversational elements or explaination.
 - All answers should be straight to point.
-- The Article needs to be expressive with Examples. IT should be very long. It should be well formatted in Markdown and should be atleast 500 words.
-- When you are asked for file name needs to be short and expressive. It should be one to three words long. Provide only one file name. Do not provide explaination.
+- The Article needs to be elaborate with examples where possible. It should be very long, atleast 20 mins read. It should be well formatted in Markdown and should be atleast 500 words.
+- When you are asked for file name needs to be short and simple. It should be one to three words long. Provide only one file name. Do not provide explaination.
 """
 
 class _WritingWizard:
     def __init__(self, messages=[], system_prompt=DEFAULT_SYSTEM_PROMPT):
+        self.DEBUG = False
         """Initialize the class with the given messages and system prompt.
         
         Args:
@@ -111,8 +112,8 @@ class _WritingWizard:
         
         self._messages.append(msg)
         
-        # if len(self.messages) > 4:
-        #     self._messages.pop(0)
+        if len(self.messages) > 4:
+            self._messages.pop(0)
     
     def clear_messages(self):
         """Clears the messages stored in the object."""
@@ -183,7 +184,8 @@ class _WritingWizard:
             print("Cannot write to file, atleast 2 messages are needed, currently are", len(self.messages))
         
         if not filename:
-            print("\nGenerating Filename... \n")
+            if self.DEBUG:
+                print("\nGenerating Filename... \n")
             self.chat("Suggest one file name which can contain this article.")
             
             filename = self.messages[-1]["content"]
@@ -193,7 +195,8 @@ class _WritingWizard:
         
         filename += '.md'
         
-        print(f"--- Saving File : {filename} --- ")
+        if self.DEBUG:
+            print(f"--- Saving File : {filename} --- ")
         
         return write_to_file(
             output_folder   = output_folder,
@@ -210,8 +213,9 @@ class _WritingWizard:
         Returns:
             str: The article generated using AI.
         """
-        print("\nWriting Article... \n")
-        self.chat(f"Write an article on the topic {topic}.")
+        if self.DEBUG:
+            print("\nWriting Article... \n")
+        self.chat(f"Write a comprehensive article on the topic {topic}.")
         
         return self.messages[-1]
 
@@ -221,11 +225,9 @@ if __name__ == '__main__':
     from sys import argv
     def test():
         WritingWizard.chat("Write an article on the topic Article-Writing Generative AI ChatBots.")
-        # print(WritingWizard.messages)
         print("\nArticle Fetched... \n")
         
         WritingWizard.chat("Suggest one file name which can contain this article.")
-        # print(WritingWizard.messages)
         print("\nTitle Fetched... \n")
         
         print(WritingWizard.save_to_file())
