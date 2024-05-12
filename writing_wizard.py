@@ -151,8 +151,6 @@ class _WritingWizard:
                 print("Error : Cannot generate completions (125) : " + e.__str__())
                 exit(1)
         
-        print(type(response))
-
         return response
     
     def chat(self, prompt:str):
