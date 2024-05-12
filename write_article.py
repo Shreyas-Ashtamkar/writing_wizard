@@ -3,7 +3,7 @@ import fire, json, datetime
 from writing_wizard import WritingWizard
 from utils import write_to_file, set_env
 
-def write_article(topic:str=None, create_file:bool=True, output_filename:str=None, output_folder:str=None, interactive:bool=False):
+def write_article(topic:str=None, create_file:bool=True, output_filename:str=None, output_folder:str=None, interactive:bool=False, DEBUG:bool=False):
     """Generate an article based on the given topic.
     
     Args:
@@ -19,6 +19,9 @@ def write_article(topic:str=None, create_file:bool=True, output_filename:str=Non
     Example:
         write_article(topic="Python Programming", create_file=True, output_folder="articles", interactive=False)
     """
+    
+    WritingWizard.clear_messages()
+    WritingWizard.DEBUG = DEBUG
     
     if interactive:
         print("     Welcome to Writing-Wizard")
@@ -48,9 +51,10 @@ def write_article(topic:str=None, create_file:bool=True, output_filename:str=Non
     
     article = WritingWizard.write_article(topic)
     
-    print("\n--------------- Generated Article --------------------\n")
-    print(article['content'])
-    print("\n------------------- Article End ----------------------\n")
+    if DEBUG:
+        print("\n--------------- Generated Article --------------------\n")
+        print(article['content'])
+        print("\n------------------- Article End ----------------------\n")
     
     if create_file:
         if interactive:
@@ -60,9 +64,12 @@ def write_article(topic:str=None, create_file:bool=True, output_filename:str=Non
             if (output_filename := input("Please enter the file name to save in or leave blank for to auto-generate it :")) == "":
                 output_filename = None
             
-            print(output_filename)
-            
-        print(WritingWizard.save_to_file( filename=output_filename, output_folder=output_folder ))
+            if DEBUG:
+                print("Output Filename:", output_filename)
+        
+        filename = WritingWizard.save_to_file( filename=output_filename, output_folder=output_folder )
+        if DEBUG:
+            print(filename)
     else:
         if interactive:
             if create_file := input("Do you wish to save this article? ").lower() in ('y', 'yes', 'ye', 'ya', 'yaa', 'sure'):
@@ -71,7 +78,7 @@ def write_article(topic:str=None, create_file:bool=True, output_filename:str=Non
                 
                 if (output_filename := input("Please enter the file name to save in or leave blank for to auto-generate it :")) == "":
                     output_filename = None
-                    
+                
                 WritingWizard.save_to_file(
                     filename      = output_filename,
                     output_folder = output_folder
@@ -83,7 +90,13 @@ def write_article(topic:str=None, create_file:bool=True, output_filename:str=Non
         filename        =   f"messages.{datetime.datetime.timestamp(datetime.datetime.now())}.json"
     )
     
-    print("\nDone.")
+    if DEBUG:
+        print("\nDone.")
+    
+    return {
+        'file' : filename,
+        'article' : article['content']
+    }
 
 if __name__ == '__main__':
     fire.Fire(write_article)
